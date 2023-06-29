@@ -262,20 +262,10 @@ int loopMenu() {
     const int menuDelete = 4;
     const int menuUpdate = 5;
     const int menuSearch = 6;
-    const int menuExit = 7;
-
-    printf("menu\n");
-    printf("1. list data\n");
-    printf("2. insert first\n");
-    printf("3. insert last\n");
-    printf("4. delete\n");
-    printf("5. update\n");
-    printf("6. search\n");
-    printf("7. exit\n");
+    const int menuShowMenu = 7;
+    const int menuExit = 8;
 
     while(menuSelected != menuExit) {
-        printf("\n\nPilih menu: "); scanf("%d", &menuSelected);
-
         switch (menuSelected) {
             case menuListData:
                 printf("\n---\nList data\n---\n");
@@ -328,11 +318,22 @@ int loopMenu() {
                 break;
 
             case menuExit:
-                printf("exit\n");
+                printf("Terima kasih\n");
                 break;
 
+            case menuShowMenu:
             default:
-                printf("menu not found\n");
+                printf("\n\nMenu\n---\n");
+                printf("%d. list data\n", menuListData);
+                printf("%d. insert first\n", menuInsertFirst);
+                printf("%d. insert last\n", menuInsertLast);
+                printf("%d. delete\n", menuDelete);
+                printf("%d. update\n", menuUpdate);
+                printf("%d. search\n", menuSearch);
+                printf("%d. show menu\n", menuShowMenu);
+                printf("%d. exit\n", menuExit);
+
+                printf("\n\nPilih menu: "); scanf("%d", &menuSelected);
                 break;
         }
     }
