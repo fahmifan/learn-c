@@ -152,6 +152,7 @@ void traversPrint(Node *awal, Node *akhir) {
         current = current->next;
     }
 }
+
 void insertFirst(Node **awal, Node **akhir, Node *node) {
     if (isEmpty(*awal, *akhir)) {
         *awal = node;
@@ -263,14 +264,14 @@ Key captureSearch() {
     printf("Masukkan key: ");
     scanf("%d", &key);
 
-    return key; 
+    return key;
 }
 
 // menu set
 const int menuListData = 1;
 const int menuInsertFirst = 2;
 const int menuInsertLast = 3;
-const int mennuInsertAfter = 4;
+const int menuInsertAfter = 4;
 const int menuDelete = 5;
 const int menuUpdate = 6;
 const int menuSearch = 7;
@@ -282,7 +283,7 @@ int captureMenu() {
     printf("%d. list data\n", menuListData);
     printf("%d. insert first\n", menuInsertFirst);
     printf("%d. insert last\n", menuInsertLast);
-    printf("%d. insert after\n", mennuInsertAfter);
+    printf("%d. insert after\n", menuInsertAfter);
     printf("%d. delete\n", menuDelete);
     printf("%d. update\n", menuUpdate);
     printf("%d. search\n", menuSearch);
@@ -327,7 +328,7 @@ int loopMenu() {
                 }
                 break;
 
-            case mennuInsertAfter: {
+            case menuInsertAfter: {
                     printf("Insert after\n\n");
                     Key key = captureSearch();
                     Node *nodeTarget = search(awal, akhir, key);
