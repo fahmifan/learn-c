@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int idCounter = 1;
 typedef int Key;
@@ -22,6 +23,7 @@ Node* search(Node *awal, Node *akhir, Key key);
 void traversPrint(Node *awal, Node *akhir);
 void insertFirst(Node **awal, Node **akhir, Node *node);
 void insertLast(Node **awal, Node **akhir, Node *node);
+void insertAfter(Node** nodeTarget, Node *node);
 int deleteByKey(Node **awal, Node **akhir, Key key);
 void update(Node **node, int data);
 int loopMenu();
@@ -30,6 +32,8 @@ Key captureDeleteByKey();
 Key captureSearch();
 int captureUpdate(Node *node);
 int captureMenu();
+void captureAnykey();
+void clearConsole();
 
 int main() {
     int exitCode = run();
@@ -119,7 +123,7 @@ int isEmpty(Node *awal, Node *akhir) {
 
 Node* search(Node *awal, Node *akhir, Key key) {
     Node *current = awal;
-    
+
     while (current != NULL) {
         if (current->key == key) {
             break;
@@ -132,17 +136,22 @@ Node* search(Node *awal, Node *akhir, Key key) {
 }
 
 void traversPrint(Node *awal, Node *akhir) {
+    // Print table headers
+    printf("| %-10s | %-15s |\n", "Key", "Data");
+    printf("|------------|-----------------|\n");
+    
     if (isEmpty(awal, akhir)) {
         return;
     }
 
     Node *current = awal;
+    int counter = 0;
     while (current != NULL) {
-        printNode(*current);
+        counter++;
+        printf("| %-10d | %-15d |\n", current->key, current->data);
         current = current->next;
     }
 }
-
 void insertFirst(Node **awal, Node **akhir, Node *node) {
     if (isEmpty(*awal, *akhir)) {
         *awal = node;
@@ -161,6 +170,15 @@ void insertLast(Node **awal, Node **akhir, Node *node) {
         (*akhir)->next = node;
         *akhir = node;
     }
+}
+
+void insertAfter(Node** nodeTarget, Node *node) {
+    if (nodeTarget == NULL) {
+        return;
+    }
+
+    node->next = (*nodeTarget)->next;
+    (*nodeTarget)->next = node;
 }
 
 // deleteByKey delete node by key return 1 if success, 0 if failed
@@ -248,22 +266,23 @@ Key captureSearch() {
     return key; 
 }
 
-
 // menu set
 const int menuListData = 1;
 const int menuInsertFirst = 2;
 const int menuInsertLast = 3;
-const int menuDelete = 4;
-const int menuUpdate = 5;
-const int menuSearch = 6;
-const int menuShowMenu = 7;
-const int menuExit = 8;
+const int mennuInsertAfter = 4;
+const int menuDelete = 5;
+const int menuUpdate = 6;
+const int menuSearch = 7;
+const int menuShowMenu = 8;
+const int menuExit = 9;
 
 int captureMenu() {
     printf("\n\nMenu\n---\n");
     printf("%d. list data\n", menuListData);
     printf("%d. insert first\n", menuInsertFirst);
     printf("%d. insert last\n", menuInsertLast);
+    printf("%d. insert after\n", mennuInsertAfter);
     printf("%d. delete\n", menuDelete);
     printf("%d. update\n", menuUpdate);
     printf("%d. search\n", menuSearch);
@@ -283,6 +302,8 @@ int loopMenu() {
     int menuSelected;
 
     while(menuSelected != menuExit) {
+        printf("\nList data\n---\n");
+        traversPrint(awal, akhir);
         menuSelected = captureMenu();
 
         switch (menuSelected) {
@@ -290,7 +311,7 @@ int loopMenu() {
                 break;
 
             case menuListData:
-                printf("\n---\nList data\n---\n");
+                printf("\nList data\n---\n");
                 traversPrint(awal, akhir);
                 break;
            
@@ -303,6 +324,21 @@ int loopMenu() {
             case menuInsertLast: {
                     Node* node = captureInsert();
                     insertLast(&awal, &akhir, node);
+                }
+                break;
+
+            case mennuInsertAfter: {
+                    printf("Insert after\n\n");
+                    Key key = captureSearch();
+                    Node *nodeTarget = search(awal, akhir, key);
+                    if (nodeTarget == NULL) {
+                        printf("Key tidak ditemukan\n");
+                        captureAnykey();
+                        break;
+                    }
+                    
+                    Node *node = captureInsert();
+                    insertAfter(&nodeTarget, node);
                 }
                 break;
 
@@ -343,9 +379,24 @@ int loopMenu() {
                 printf("Terima kasih\n");
                 break;
         }
-        char enter;
-        printf("Tekan enter"); scanf("%s", &enter);
+        sleep(1);
+        clearConsole();
     }
     
     return 0;
+}
+
+void captureAnykey() {
+    printf("Tekan tombol enter untuk melanjutkan");
+    fflush(stdout);
+    while (getchar() != '\n');
+    getchar();
+}
+
+void clearConsole() {
+    #ifdef _WIN32
+        system("cls"); // For Windows
+    #else
+        system("clear"); // For Unix and macOS
+    #endif
 }
