@@ -22,7 +22,6 @@ struct node *current = NULL;
 
 // list dgn ukuran/jumlah-N
 
-
 int main(){
     // kondisi ketidak adaan value alamat
     int *point_node_x;

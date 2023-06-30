@@ -29,6 +29,7 @@ Node* captureInsert();
 Key captureDeleteByKey();
 Key captureSearch();
 int captureUpdate(Node *node);
+int captureMenu();
 
 int main() {
     int exitCode = run();
@@ -43,7 +44,6 @@ int run() {
 }
 
 int runTest() {
-
     Node *awal = NULL;
     Node *akhir = NULL;
     Node *node = NULL;
@@ -217,7 +217,6 @@ Node* captureInsert() {
     return node;
 }
 
-
 int captureUpdate(Node *node) {
     if (node == NULL) {
         return 0;
@@ -249,24 +248,47 @@ Key captureSearch() {
     return key; 
 }
 
+
+// menu set
+const int menuListData = 1;
+const int menuInsertFirst = 2;
+const int menuInsertLast = 3;
+const int menuDelete = 4;
+const int menuUpdate = 5;
+const int menuSearch = 6;
+const int menuShowMenu = 7;
+const int menuExit = 8;
+
+int captureMenu() {
+    printf("\n\nMenu\n---\n");
+    printf("%d. list data\n", menuListData);
+    printf("%d. insert first\n", menuInsertFirst);
+    printf("%d. insert last\n", menuInsertLast);
+    printf("%d. delete\n", menuDelete);
+    printf("%d. update\n", menuUpdate);
+    printf("%d. search\n", menuSearch);
+    printf("%d. show menu\n", menuShowMenu);
+    printf("%d. exit\n", menuExit);
+
+    int menuSelected;
+    printf("\n\nPilih menu: "); scanf("%d", &menuSelected);
+
+    return menuSelected;
+}
+
 int loopMenu() {
     Node *awal = NULL;
     Node *akhir = NULL;
 
     int menuSelected;
 
-    // menu set
-    const int menuListData = 1;
-    const int menuInsertFirst = 2;
-    const int menuInsertLast = 3;
-    const int menuDelete = 4;
-    const int menuUpdate = 5;
-    const int menuSearch = 6;
-    const int menuShowMenu = 7;
-    const int menuExit = 8;
-
     while(menuSelected != menuExit) {
+        menuSelected = captureMenu();
+
         switch (menuSelected) {
+            default: // menuShowMenu
+                break;
+
             case menuListData:
                 printf("\n---\nList data\n---\n");
                 traversPrint(awal, akhir);
@@ -305,7 +327,7 @@ int loopMenu() {
                     captureUpdate(searchRes);
                     break;
                 }
-            
+
             case menuSearch: {
                     Key key = captureSearch();
                     Node *searchRes = search(awal, akhir, key);
@@ -320,22 +342,9 @@ int loopMenu() {
             case menuExit:
                 printf("Terima kasih\n");
                 break;
-
-            case menuShowMenu:
-            default:
-                printf("\n\nMenu\n---\n");
-                printf("%d. list data\n", menuListData);
-                printf("%d. insert first\n", menuInsertFirst);
-                printf("%d. insert last\n", menuInsertLast);
-                printf("%d. delete\n", menuDelete);
-                printf("%d. update\n", menuUpdate);
-                printf("%d. search\n", menuSearch);
-                printf("%d. show menu\n", menuShowMenu);
-                printf("%d. exit\n", menuExit);
-
-                printf("\n\nPilih menu: "); scanf("%d", &menuSelected);
-                break;
         }
+        char enter;
+        printf("Tekan enter"); scanf("%s", &enter);
     }
     
     return 0;
